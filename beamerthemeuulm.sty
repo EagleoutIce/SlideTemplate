@@ -334,13 +334,14 @@
 % ---------------------------------------------
 % color boxes
 % ---------------------------------------------
-\renewtcolorbox{definition}[2][]{title={\setlength{\parskip}{0ex}\vphantom{/}#2},colback=orange!10,colframe=orange!30,coltitle=black,fonttitle=\bfseries,left=1mm,right=1mm,top=1mm,bottom=1mm,#1}
-
-\newcommand{\mydefinitiontight}[2]{
-	\begin{tcolorbox}[title={\setlength{\parskip}{0ex}\vphantom{/}#1},colback=white,colframe=orange!30,coltitle=black,fonttitle=\bfseries,left=0mm,right=0mm,top=0mm,bottom=0mm]
-		#2
-	\end{tcolorbox}
+\tcbset{%
+    uulm@basic-boxstyle/.style n args=4{title={\setlength{\parskip}{0ex}\vphantom{/}#2},colframe=#3!30,coltitle=black,fonttitle=\bfseries,left=#4,right=#4,top=#4,bottom=#4,#1},
+    uulm@boxstyle/.style n args=3{uulm@basic-boxstyle={#1}{#2}{#3}{1mm},colback=#3!10},
+    uulm@tightboxstyle/.style n args=3{uulm@basic-boxstyle={#1}{#2}{#3}{0mm},colback=white}
 }
+
+\renewtcolorbox{definition}[2][]{uulm@boxstyle={#1}{#2}{orange}}
+\newtcolorbox{mydefinitiontight}[2][]{uulm@tightboxstyle={#1}{#2}{orange}}
 
 \newcommand{\myexample}[2]{
 	\begin{tcolorbox}[title={\setlength{\parskip}{0ex}\vphantom{/}#1},colback=blue!10,colframe=blue!30,coltitle=black,fonttitle=\bfseries,left=1mm,right=1mm,top=1mm,bottom=1mm]
