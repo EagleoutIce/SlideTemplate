@@ -255,13 +255,7 @@
     \halfpage{#2}
 }
 
-\newcommand{\leftmiddleandright}[3]{
-	\thirdpage{#1}
-    \hfill
-    \thirdpage{#2}
-    \hfill
-    \thirdpage{#3}
-}
+\newenvironment{leftmiddleandright}{\columns[c,onlytextwidth]\def\next{\column{.31\textwidth}}\next}{\endcolumns}
 
 \newcommand{\leftthenright}[2]{
     \halfpage{#1}
@@ -340,11 +334,7 @@
 % ---------------------------------------------
 % color boxes
 % ---------------------------------------------
-\newcommand{\mydefinition}[2]{
-	\begin{tcolorbox}[title={\setlength{\parskip}{0ex}\vphantom{/}#1},colback=orange!10,colframe=orange!30,coltitle=black,fonttitle=\bfseries,left=1mm,right=1mm,top=1mm,bottom=1mm]
-		#2
-	\end{tcolorbox}
-}
+\renewtcolorbox{definition}[2][]{title={\setlength{\parskip}{0ex}\vphantom{/}#2},colback=orange!10,colframe=orange!30,coltitle=black,fonttitle=\bfseries,left=1mm,right=1mm,top=1mm,bottom=1mm,#1}
 
 \newcommand{\mydefinitiontight}[2]{
 	\begin{tcolorbox}[title={\setlength{\parskip}{0ex}\vphantom{/}#1},colback=white,colframe=orange!30,coltitle=black,fonttitle=\bfseries,left=0mm,right=0mm,top=0mm,bottom=0mm]

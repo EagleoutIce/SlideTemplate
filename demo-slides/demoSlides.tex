@@ -7,6 +7,7 @@
 
 \usepackage{../beamerthemeuulm} % use the inofficial uulm beamer theme
 \setfaculty{infIngPsy} % set the color scheme for your faculty here [med/infIngPsy/math/nat]
+\usepackage{minted}
 
 \usepackage{babel}
 %\recordingtrue % special recording mode for use with a greenscreen, gives you space to show yourself in a layer in front of the slides, has no effect in the handout mode
@@ -67,28 +68,32 @@
 \end{frame}
 
 \subsection{Colored Boxes}
-\begin{frame}{\insertsubsection\ with a really really really really really really really really really really really long title\hfill With Fill!}
+\begin{frame}[fragile]{\insertsubsection\ with a really really really really really really really really really really really long title\hfill With Fill!}
 	Normal versions:
 
-	\leftmiddleandright{
-		\mydefinition{A Definition}{This is a definition.}
-	}{
+\begin{leftmiddleandright}
+		\begin{definition}{A Definition}
+			This is a definition.
+\begin{minted}{java}
+System.out.println("foo");
+\end{minted}
+		\end{definition}
+\next
 		\myexample{An Example}{This is an example.}
-	}{
+\next
 		\mynote{A Note}{This is a note.}
-	}
-
+\end{leftmiddleandright}
 	\vfill
 
 	Tight versions (e.g., for use with pictures):
 
-	\leftmiddleandright{
+\begin{leftmiddleandright}
 		\mydefinitiontight{A Definition}{This is a definition.}
-	}{
+\next
 		\myexampletight{An Example}{This is an example.}
-	}{
+\next
 		\mynotetight{A Note}{This is a note.}
-	}
+\end{leftmiddleandright}
 \end{frame}
 
 \section{Slide Layouts}
@@ -108,13 +113,13 @@
 
 \subsection{Left, Middle, and Right}
 \begin{frame}{\insertsubsection}
-    \leftmiddleandright{
+\begin{leftmiddleandright}
         This is an example text that is shown in the \textbf{left column}.
-    }{
+\next
         This is an example text that is shown in the \textbf{middle column}.
-    }{
+\next
         This is an example text that is shown in the \textbf{right column}.
-    }
+\end{leftmiddleandright}
 	\vfill
 	\mynote{Explanation}{
 		All columns are visible in \textbf{handout}, \textbf{slide}, and \textbf{recording} mode (i.e., there are no animations).
