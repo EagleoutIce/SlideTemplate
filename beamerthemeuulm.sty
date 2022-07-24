@@ -255,7 +255,33 @@
     \halfpage{#2}
 }
 
-\newenvironment{leftmiddleandright}{\columns[c,onlytextwidth]\def\next{\column{.31\textwidth}}\next}{\endcolumns}
+% the old version allowed to pass on three macros, we want to support this non-verbatim-safe
+% variant for legacy reasons. With '\@ifnextchar\bgroup' we could check if this macro
+% is followed by an open brace. This is fragile, because we do no longer separate between
+% protective groups and the plain definition. Assuming, that no non-export user will
+% use plain macro definitions, we will use currenvir guards.
+\def\uulm@txt@leftmiddleandright{leftmiddleandright}%
+\def\leftmiddleandright{\ifx\@currenvir\uulm@txt@leftmiddleandright\expandafter\uulm@leftmiddleright\else\expandafter\uulm@old@leftmiddleright\fi}
+\def\uulm@old@leftmiddleright#1#2#3{%
+	\thirdpage{#1}%
+    \hfill
+    \thirdpage{#2}%
+    \hfill
+    \thirdpage{#3}%
+}
+% TODO: to be honest, it would be better to patch the old variants so they work similar to
+% 'onlytextwidth', but the old version of `leftmiddleright` did not implement this behavior,
+% and therefore, fails with the internal padding of minipages and spacing problems:
+%    \partofpage{<X>
+% \begin{minipage}{0.#1\textwidth}
+%     \begin{flushleft}
+%         #2
+%     \end{flushleft}
+% \end{minipage}<X>
+% latex will insert spaces at each newline (e.g. <X>, same for the passed #2)
+% and we do not want them!!
+\def\uulm@leftmiddleright{\columns[c,onlytextwidth]\def\next{\column{.31\textwidth}}\next}
+\def\endleftmiddleandright{\endcolumns}
 
 \newcommand{\leftthenright}[2]{
     \halfpage{#1}
