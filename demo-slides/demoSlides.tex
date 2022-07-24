@@ -146,7 +146,7 @@ System.out.println("foo");
 \section{Animated Slide Layouts}
 
 \subsection{Left then Right}
-\begin{frame}{\insertsubsection}
+\begin{frame}[fragile]{\insertsubsection}
     \leftthenright{
         This is an example text that is shown in the \textbf{left column}.
     }{
@@ -155,8 +155,14 @@ System.out.println("foo");
 	 \vfill
 	 \begin{leftthenright}
 		This is an example text that is shown in the \textbf{left column}.
+	\begin{minted}{java}
+class Example {}
+	\end{minted}
 	\second
 		This is an example text that is shown in the \textbf{right column}.
+	\begin{minted}{java}
+class ExampleB extends Example {}
+	\end{minted}
 	 \end{leftthenright}
 	\vfill
 	\mynote{Explanation}{
