@@ -259,12 +259,7 @@
 \@namedef{uulm@#1}{\columns[c,onlytextwidth]\def\next{#4}\next}
 \@namedef{end#1}{\endcolumns}
 }
-\errorcontextlines9999
-\uulm@CreateSplitterBox{leftandright}{2}{
-    \halfpage{#1}
-    \hfill
-    \halfpage{#2}
-}{\column{.48\textwidth}}
+\uulm@CreateSplitterBox{leftandright}{2}{\halfpage{#1}\hfill\halfpage{#2}}{\column{.48\textwidth}}
 
 % the old version allowed to pass on three macros, we want to support this non-verbatim-safe
 % variant for legacy reasons. With '\@ifnextchar\bgroup' we could check if this macro
