@@ -297,20 +297,25 @@
 \@namedef{uulm@#1}{\columns[c,onlytextwidth]\def\next{#4}\next}
 \@namedef{end#1}{\endcolumns}
 }
-\uulm@CreateSplitterBox{leftandright}{2}{\halfpage{#1}\hfill\halfpage{#2}}{\column{.48\textwidth}}
 
-\def\uulm@txt@leftmiddleandright{leftmiddleandright}%
-\def\leftmiddleandright{\ifx\@currenvir\uulm@txt@leftmiddleandright\expandafter\uulm@leftmiddleright\else\expandafter\uulm@old@leftmiddleright\fi}
-\def\uulm@old@leftmiddleright#1#2#3{%
-	\thirdpage{#1}%
-    \hfill
-    \thirdpage{#2}%
-    \hfill
-    \thirdpage{#3}%
-}
+% corresponds to '\halfpage', however, with the new columns we could use larger values
+% (same for thirdnext)
+\def\halfnext{{.48\textwidth}}
+% corresponds to '\thirdpage'
+\def\thirdnext{{.31\textwidth}}
 
-\def\uulm@leftmiddleright{\columns[c,onlytextwidth]\def\next{\column{.31\textwidth}}\next}
-\def\endleftmiddleandright{\endcolumns}
+% now we want to create a splitter-box
+% the first argument is the name and corresponds directly to the environment/available macro
+% in this case: 'leftandright'
+% with 2 we express, that the old '\leftandright' definition required 2 arguments,
+% this enables us to refer to them with '#1' and '#2 in the next argument which basically
+% just holds the definition of the original '\leftandright'-macro
+% i removed some newlines to make it more compact (but they do not matter)
+% the last macro defines the new definition of '\next' which acts as the splitter
+\uulm@CreateSplitterBox{leftandright}{2}{\halfpage{#1}\hfill\halfpage{#2}}{\column\halfnext}
+
+\uulm@CreateSplitterBox{leftmiddleandright}{3}{\thirdpage{#1}\hfill\thirdpage{#2}\hfill\thirdpage{#3}}{\column\thirdnext}
+
 
 \newcommand{\leftthenright}[2]{
     \halfpage{#1}
