@@ -340,12 +340,19 @@
     uulm@tightboxstyle/.style n args=3{uulm@basic-boxstyle={#1}{#2}{#3}{0mm},colback=white}
 }
 
+% we could group this by a generation macro
 \renewtcolorbox{definition}[2][]{uulm@boxstyle={#1}{#2}{orange}}
+\newtcbox\mydefinition[2][]{uulm@boxstyle={#1}{#2}{orange}}
 \newtcolorbox{definitiontight}[2][]{uulm@tightboxstyle={#1}{#2}{orange}}
+\newtcbox\mydefinitiontight[2][]{uulm@tightboxstyle={#1}{#2}{orange}}
 
 \renewtcolorbox{example}[2][]{uulm@boxstyle={#1}{#2}{blue}}
+\newtcbox\myexample[2][]{uulm@boxstyle={#1}{#2}{blue}}
 \newtcolorbox{exampletight}[2][]{uulm@tightboxstyle={#1}{#2}{blue}}
+\newtcbox\myexampletight[2][]{uulm@tightboxstyle={#1}{#2}{blue}}
 
 \renewtcolorbox{note}[2][]{uulm@boxstyle={#1}{#2}{red}}
+\newtcbox\mynote[2][]{uulm@boxstyle={#1}{#2}{red}}
 \newtcolorbox{notetight}[2][]{uulm@tightboxstyle={#1}{#2}{red}}
+\newtcbox\mynotetight[2][]{uulm@tightboxstyle={#1}{#2}{red}}
 % ---------------------------------------------
