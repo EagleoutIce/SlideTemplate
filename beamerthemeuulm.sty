@@ -342,8 +342,20 @@
 
 % name | color
 \def\uulm@MakeNewBox#1#2{
+% renew will not work if we define a box that does not already exist in beamer
+% we could check this by \ifcsname #1\endcsname...\else...\fi
+% however, for the moment this is not necessary
+% in the definition #1 and #2 refer to the arguments of \uulm@MakeNewBox
+% while ##1 and ##2 to refer to the arguments passed on to the new tcolorbox.
+% therefore, with '\uulm@MakeNewBox{definition}{orange}', we create a new tcolorbox
+% named 'definition' which wenn called with '\begin{definition}[top=10mm]{My title}...'
+% will result in the option list 'uulm@boxstyle={top=10mm}{My title}{orange}'
 \renewtcolorbox{#1}[2][]{uulm@boxstyle={##1}{##2}{#2}}
+% here, we re-create the old macros (e.g. '\mydefinition')
+% 'capture=minipage' ensures their behavior is similar to the previous one (the default for
+% tcbox would be hbox and no longer fill the width)
 \expandafter\newtcbox\csname my#1\endcsname[2][]{capture=minipage,uulm@boxstyle={##1}{##2}{#2}}
+% now, we do the same for the tight-version of the boxes
 \newtcolorbox{#1tight}[2][]{uulm@tightboxstyle={##1}{##2}{#2}}
 \expandafter\newtcbox\csname my#1tight\endcsname[2][]{capture=minipage,uulm@tightboxstyle={##1}{##2}{#2}}
 }
