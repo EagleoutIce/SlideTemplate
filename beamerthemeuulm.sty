@@ -254,8 +254,10 @@
 % protective groups and the plain definition. Assuming, that no non-export user will
 % use plain macro definitions, we will use currenvir guards.
 
+\newcount\uulm@splitter@nextcount
+
 % macro name [and text] | number of old args | old definition
-% | new definition (next-target only,no args => next)
+% | new definition (next-target only,no args => first[|second|third|... optional if not needed])
 \def\uulm@CreateSplitterBox#1#2#3#4{%
 % with this we define a new macro which maps to the text-name of the environment
 % therefore, '\uulm@CreateSplitterBox{abcd}...' would produce:
@@ -294,13 +296,18 @@
 % latex will insert spaces at each newline (e.g. <X>, same for the passed #2)
 % and we do not want them!!
 % in short, the following to lines define the macros used when in environment-mode
-\@namedef{uulm@#1}{\columns[c,onlytextwidth]\def\next{#4}\next}
-\@namedef{end#1}{\endcolumns}
+% with \uulm@splitter@nextcount we count the number of times, next has been called
+\@namedef{uulm@#1}{\begingroup\let\all\@uulm@set@all#4\columns[c,onlytextwidth]\first}
+\@namedef{end#1}{\endcolumns\endgroup}
 }
+
+% just a shortcut to set all columns the same way, useful, whenever there are no animations
+% will be accessible as '\all' whenever useful
+\def\@uulm@set@all#1{\def\first{\column#1}\def\second{\column#1}\def\third{\column#1}}
 
 % corresponds to '\halfpage', however, with the new columns we could use larger values
 % (same for thirdnext)
-\def\halfnext{{.48\textwidth}}
+\def\halfnext{{.489\textwidth}}
 % corresponds to '\thirdpage'
 \def\thirdnext{{.31\textwidth}}
 
@@ -311,83 +318,72 @@
 % this enables us to refer to them with '#1' and '#2 in the next argument which basically
 % just holds the definition of the original '\leftandright'-macro
 % i removed some newlines to make it more compact (but they do not matter)
-% the last macro defines the new definition of '\next' which acts as the splitter
-\uulm@CreateSplitterBox{leftandright}{2}{\halfpage{#1}\hfill\halfpage{#2}}{\column\halfnext}
+% the last macro defines the new definition of the column splitters first|second...
+\uulm@CreateSplitterBox{leftandright}{2}{\halfpage{#1}\hfill\halfpage{#2}}{\all\halfnext}
 
-\uulm@CreateSplitterBox{leftmiddleandright}{3}{\thirdpage{#1}\hfill\thirdpage{#2}\hfill\thirdpage{#3}}{\column\thirdnext}
+\uulm@CreateSplitterBox{leftmiddleandright}{3}{\thirdpage{#1}\hfill\thirdpage{#2}\hfill\thirdpage{#3}}{\all\thirdnext}
 
+\uulm@CreateSplitterBox{leftthenright}{2}{\halfpage{#1}\hfill\onslide<2->{\halfpage{#2}}}{\def\first{\column\halfnext}\def\second{\column<2->\halfnext}}
 
-\newcommand{\leftthenright}[2]{
-    \halfpage{#1}
-    \hfill
-    \onslide<2->{\halfpage{#2}}
-}
+\uulm@CreateSplitterBox{rightthenleft}{2}{\onslide<2->{\halfpage{#1}}\hfill\halfpage{#2}}{\def\first{\column<2->\halfnext}\def\second{\column\halfnext}}
 
-\newcommand{\rightthenleft}[2]{
-    \onslide<2->{\halfpage{#1}}
-    \hfill
-    \halfpage{#2}
-}
+\uulm@CreateSplitterBox{leftmiddlethenright}{3}{\thirdpage{#1}\hfill\onslide<2->{\thirdpage{#2}}\hfill\onslide<3->{\thirdpage{#2}}}{\def\first{\column\thirdnext}\def\second{\column<2->\thirdnext}\def\third{\column<3->\thirdnext}}
 
-\newcommand{\leftmiddlethenright}[3]{
-	\thirdpage{#1}
-    \hfill
-    \onslide<2->{\thirdpage{#2}}
-    \hfill
-    \onslide<3->{\thirdpage{#3}}
-}
+\uulm@CreateSplitterBox{rightmiddlethenleft}{3}{\onslide<3->{\thirdpage{#1}}\hfill\onslide<2->{\thirdpage{#2}}\hfill\thirdpage{#2}}{\def\first{\column<3->\thirdnext}\def\second{\column<2->\thirdnext}\def\third{\column\thirdnext}}
 
-\newcommand{\rightmiddlethenleft}[3]{
-	\onslide<3->{\thirdpage{#1}}
-    \hfill
-    \onslide<2->{\thirdpage{#2}}
-    \hfill
-    \thirdpage{#3}
-}
+% for the or environments we simply change the first-second-third definitions
+\uulm@CreateSplitterBox{leftorright}{2}{\ifrecording
+\onslide<1>{\halfpage{#1}}
+\onslide<2>{\hfill}
+\onslide<3>{\halfpage{#2}}
+\else
+\leftthenright{#1}{#2}
+\fi}{\ifrecording
+\def\first{\column<1>\halfnext}\def\second{\column<3>\halfnext}%
+\else
+\def\first{\column\halfnext}\def\second{\column<2->\halfnext}%
+\fi}
 
-\newcommand{\leftorright}[2]{ % only works in recording mode
-    \ifrecording
-    \onslide<1>{\halfpage{#1}}
-    \onslide<2>{\hfill}
-    \onslide<3>{\halfpage{#2}}
-    \else
-	\leftthenright{#1}{#2}
-	\fi
-}
+\uulm@CreateSplitterBox{rightorleft}{2}{\ifrecording
+\onslide<3>{\halfpage{#1}}
+\onslide<2>{\hfill}
+\onslide<1>{\halfpage{#2}}
+\else
+\leftthenright{#1}{#2}
+\fi}{\ifrecording
+\def\first{\column<3>\halfnext}\def\second{\column<1>\halfnext}%
+\else
+\def\first{\column<2->\halfnext}\def\second{\column\halfnext}%
+\fi}
 
-\newcommand{\rightorleft}[2]{ % only works in recording mode
-    \ifrecording
-    \onslide<3>{\halfpage{#1}}
-    \onslide<2>{\hfill}
-    \onslide<1>{\halfpage{#2}}
-    \else
-	\rightthenleft{#1}{#2}
-	\fi
-}
+\uulm@CreateSplitterBox{leftmiddleorright}{3}{\ifrecording
+\onslide<1>{\thirdpage{#1}}
+\onslide<2>{\hfill}
+\onslide<3>{\thirdpage{#2}}
+\onslide<4>{\hfill}
+\onslide<5>{\thirdpage{#3}}
+\else
+\leftmiddlethenright{#1}{#2}
+\fi}{\ifrecording
+\def\first{\column\thirdnext}\def\second{\column<3>\thirdnext}\def\third{\column<5>\thirdnext}%
+\else
+\def\first{\column\thirdnext}\def\second{\column<2->\thirdnext}\def\third{\column<3->\thirdnext}%
+\fi}
 
-\newcommand{\leftmiddleorright}[3]{ % only works in recording mode
-    \ifrecording
-    \onslide<1>{\thirdpage{#1}}
-    \onslide<2>{\hfill}
-    \onslide<3>{\thirdpage{#2}}
-    \onslide<4>{\hfill}
-    \onslide<5>{\thirdpage{#3}}
-    \else
-	\leftmiddlethenright{#1}{#2}{#3}
-	\fi
-}
+\uulm@CreateSplitterBox{rightmiddleorleft}{3}{\ifrecording
+\onslide<5>{\thirdpage{#1}}
+\onslide<4>{\hfill}
+\onslide<3>{\thirdpage{#2}}
+\onslide<2>{\hfill}
+\onslide<1>{\thirdpage{#3}}
+\else
+\rightmiddlethenleft{#1}{#2}
+\fi}{\ifrecording
+\def\first{\column<4->\thirdnext}\def\second{\column<3>\thirdnext}\def\third{\column\thirdnext}%
+\else
+\def\first{\column<3->\thirdnext}\def\second{\column<2->\thirdnext}\def\third{\column\thirdnext}%
+\fi}
 
-\newcommand{\rightmiddleorleft}[3]{ % only works in recording mode
-    \ifrecording
-    \onslide<5>{\thirdpage{#1}}
-    \onslide<4>{\hfill}
-    \onslide<3>{\thirdpage{#2}}
-    \onslide<2>{\hfill}
-    \onslide<1>{\thirdpage{#3}}
-    \else
-	\rightmiddlethenleft{#1}{#2}{#3}
-	\fi
-}
 % ---------------------------------------------
 
 
