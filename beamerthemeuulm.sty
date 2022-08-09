@@ -129,11 +129,11 @@
 
 \setbeamertemplate{frametitle}{
     \vspace{20pt}%
-    \setbox0=\hbox{\insertframetitle}%
+    \usebeamerfont{frametitle}\usebeamercolor{frametitle}\setbox0=\hbox{\insertframetitle}%
     \ifdim\wd0<\textwidth % <- in this case we want to allow hfill etc. to work normally
     \insertframetitle
     \else\let\hfill\space\resizebox\linewidth!{\insertframetitle}\fi\par
-    \setbox0=\hbox{\insertframesubtitle}%
+    \usebeamerfont{framesubtitle}\usebeamercolor{framesubtitle}\setbox0=\hbox{\insertframesubtitle}%
     \ifdim\wd0<\textwidth % <- in this case we want to allow hfill etc. to work normally
     \insertframesubtitle
     \else\let\hfill\space\resizebox\linewidth!{\insertframesubtitle}\fi
