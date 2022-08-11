@@ -19,7 +19,7 @@
 % general settings
 % ---------------------------------------------
 \beamertemplatenavigationsymbolsempty % remove the default navigation symbols
-\def\ThemeLetter#1{\def\@tmp{#1}\ifx\@tmp\@empty\let\@theme@letter@title\@empty \let\@theme@letter@page\@empty\else\def\@theme@letter@title{#1.\space}\def\@theme@letter@page{#1--}\fi}
+\def\ThemeLetter#1{\def\@tmp{#1}\ifx\@tmp\@empty\let\@theme@letter@title\@empty\let\@theme@letter@raw\@empty \let\@theme@letter@page\@empty\else\def\@theme@letter@raw{#1}\def\@theme@letter@title{#1.\space}\def\@theme@letter@page{#1--}\fi}
 \ThemeLetter{}
 
 \appto\Ginput@path{{../pics/logos}{../pics/uulm}{../pics/nature}}
@@ -403,11 +403,14 @@
 % name
 \def\uulm@ClearNumber#1{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{}}
 % name | prefix
-\def\uulm@SetNumber#1#2{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{#2~\thetcbcounter:\space}}
+\def\uulm@SetNumber#1#2{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{#2}}
+
+\def\uulm@SetColor#1#2{\expandafter\def\csname uulm@box@#1@color\endcsname{#2}}
 
 % [optional number prefix] | name | color
 \newcommand\uulm@MakeNewBox[3][]{
 \def\@tmp{#1}\ifx\@tmp\@empty\uulm@ClearNumber{#2}\else\uulm@SetNumber{#2}{#1}\fi
+\uulm@SetColor{#2}{#3}%
 % renew will not work if we define a box that does not already exist in beamer
 % we could check this by \ifcsname #1\endcsname...\else...\fi
 % however, for the moment this is not necessary
@@ -417,20 +420,23 @@
 % named 'definition' which wenn called with '\begin{definition}[top=10mm]{My title}...'
 % will result in the option list 'uulm@boxstyle={top=10mm}{My title}{orange}'
 \def\@tmp{\newtcbox[use counter from=#2]}%
-\renewtcolorbox[auto counter]{#2}[2][]{uulm@boxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{#3}}%
+\renewtcolorbox[auto counter]{#2}[2][]{uulm@boxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
 % here, we re-create the old macros (e.g. '\mydefinition')
 % 'capture=minipage' ensures their behavior is similar to the previous one (the default for
 % tcbox would be hbox and no longer fill the width)
-\expandafter\@tmp\csname my#2\endcsname[2][]{capture=minipage,uulm@boxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{#3}}%
+\expandafter\@tmp\csname my#2\endcsname[2][]{capture=minipage,uulm@boxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
 % now, we do the same for the tight-version of the boxes
-\newtcolorbox[use counter from=#2]{#2tight}[2][]{uulm@tightboxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{#3}}%
-\expandafter\@tmp\csname my#2tight\endcsname[2][]{capture=minipage,uulm@tightboxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{#3}}%
+\newtcolorbox[use counter from=#2]{#2tight}[2][]{uulm@tightboxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
+\expandafter\@tmp\csname my#2tight\endcsname[2][]{capture=minipage,uulm@tightboxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
 }
 
 \let\UulmMakeNewBox\uulm@MakeNewBox
 \let\UulmClearNumber\uulm@ClearNumber
 \let\UulmSetNumber\uulm@SetNumber
-\uulm@MakeNewBox[Definition]{definition}{orange}
+\let\UulmSetColor\uulm@SetColor
+
+\uulm@MakeNewBox[Definition~\@theme@letter@raw
+\thetcbcounter:\space]{definition}{orange}
 \uulm@MakeNewBox{example}{blue}
 \uulm@MakeNewBox{note}{red}
 % ---------------------------------------------
