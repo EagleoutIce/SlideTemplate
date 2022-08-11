@@ -403,11 +403,11 @@
 % name
 \def\uulm@ClearNumber#1{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{}}
 % name | prefix
-\def\uulm@SetNumber#1#2{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{#1~\thetcbcounter:\space}}
+\def\uulm@SetNumber#1#2{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{#2~\thetcbcounter:\space}}
 
 % [optional number prefix] | name | color
 \newcommand\uulm@MakeNewBox[3][]{
-\def\@tmp{#1}\ifx\@tmp\@empty\expandafter\def\csname uulm@box@#2@titleprefix\endcsname{} \else\expandafter\def\csname uulm@box@#2@titleprefix\endcsname{#1~\thetcbcounter:\space}\fi
+\def\@tmp{#1}\ifx\@tmp\@empty\uulm@ClearNumber{#2}\else\uulm@SetNumber{#2}{#1}\fi
 % renew will not work if we define a box that does not already exist in beamer
 % we could check this by \ifcsname #1\endcsname...\else...\fi
 % however, for the moment this is not necessary
