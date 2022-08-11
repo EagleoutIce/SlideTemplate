@@ -19,7 +19,7 @@
 % general settings
 % ---------------------------------------------
 \beamertemplatenavigationsymbolsempty % remove the default navigation symbols
-\def\ThemeLetter#1{\def\@tmp{#1}\ifx\@tmp\@empty\let\@theme@letter@title\@empty \let\@theme@letter@page\@empty\else\def\@theme@letter@title{#1.\space}\def\@theme@letter@page{#1--}\fi}
+\def\ThemeLetter#1{\def\@tmp{#1}\ifx\@tmp\@empty\let\@theme@letter@title\@empty\let\@theme@letter@raw\@empty \let\@theme@letter@page\@empty\else\def\@theme@letter@raw{#1}\def\@theme@letter@title{#1.\space}\def\@theme@letter@page{#1--}\fi}
 \ThemeLetter{}
 
 \appto\Ginput@path{{../pics/logos}{../pics/uulm}{../pics/nature}}
@@ -435,7 +435,8 @@
 \let\UulmSetNumber\uulm@SetNumber
 \let\UulmSetColor\uulm@SetColor
 
-\uulm@MakeNewBox[Definition~\@theme@letter@page\thetcbcounter:\space]{definition}{orange}
+\uulm@MakeNewBox[Definition~\@theme@letter@raw
+\thetcbcounter:\space]{definition}{orange}
 \uulm@MakeNewBox{example}{blue}
 \uulm@MakeNewBox{note}{red}
 % ---------------------------------------------
