@@ -403,7 +403,7 @@
 % name
 \def\uulm@ClearNumber#1{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{}}
 % name | prefix
-\def\uulm@SetNumber#1#2{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{#2~\thetcbcounter:\space}}
+\def\uulm@SetNumber#1#2{\expandafter\def\csname uulm@box@#1@titleprefix\endcsname{#2}}
 
 \def\uulm@SetColor#1#2{\expandafter\def\csname uulm@box@#1@color\endcsname{#2}}
 
@@ -435,7 +435,7 @@
 \let\UulmSetNumber\uulm@SetNumber
 \let\UulmSetColor\uulm@SetColor
 
-\uulm@MakeNewBox[Definition]{definition}{orange}
+\uulm@MakeNewBox[Definition~\@theme@letter@page\thetcbcounter:\space]{definition}{orange}
 \uulm@MakeNewBox{example}{blue}
 \uulm@MakeNewBox{note}{red}
 % ---------------------------------------------
