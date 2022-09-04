@@ -10,6 +10,7 @@
 \usepackage{color}
 \usepackage{fitbox} % used to auto-scale long frame titles
 \usepackage{tcolorbox} % used for color boxes (definition, example, note)
+\tcbuselibrary{hooks} % for the prefixes before the title
 \usepackage{ifthen}
 \usepackage{microtype} % balance text
 % ---------------------------------------------
@@ -395,7 +396,7 @@
 % color boxes
 % ---------------------------------------------
 \tcbset{%
-    uulm@basic-boxstyle/.style n args=4{title={\setlength{\parskip}{0ex}\vphantom{/}#2},colframe=#3!30,coltitle=black,fonttitle=\bfseries,left=#4,right=#4,top=#4,bottom=#4,#1},
+    uulm@basic-boxstyle/.style n args=4{title={#2},before title={\setlength{\parskip}{0ex}\vphantom{/}},colframe=#3!30,coltitle=black,fonttitle=\bfseries,left=#4,right=#4,top=#4,bottom=#4,#1},
     uulm@boxstyle/.style n args=3{uulm@basic-boxstyle={#1}{#2}{#3}{1mm},colback=#3!10},
     uulm@tightboxstyle/.style n args=3{uulm@basic-boxstyle={#1}{#2}{#3}{0mm},colback=white},
 }
@@ -420,11 +421,11 @@
 % named 'definition' which wenn called with '\begin{definition}[top=10mm]{My title}...'
 % will result in the option list 'uulm@boxstyle={top=10mm}{My title}{orange}'
 \def\@tmp{\newtcbox[use counter from=#2]}%
-\renewtcolorbox[auto counter]{#2}[2][]{uulm@boxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
+\renewtcolorbox[auto counter]{#2}[2][]{uulm@boxstyle={before title app={\csname uulm@box@#2@titleprefix\endcsname},##1}{##2}{\csname uulm@box@#2@color\endcsname}}%
 % here, we re-create the old macros (e.g. '\mydefinition')
 % 'capture=minipage' ensures their behavior is similar to the previous one (the default for
 % tcbox would be hbox and no longer fill the width)
-\expandafter\@tmp\csname my#2\endcsname[2][]{capture=minipage,uulm@boxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
+\expandafter\@tmp\csname my#2\endcsname[2][]{capture=minipage,uulm@boxstyle={before title app={\csname uulm@box@#2@titleprefix\endcsname},##1}{##2}{\csname uulm@box@#2@color\endcsname}}%
 % now, we do the same for the tight-version of the boxes
 \newtcolorbox[use counter from=#2]{#2tight}[2][]{uulm@tightboxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
 \expandafter\@tmp\csname my#2tight\endcsname[2][]{capture=minipage,uulm@tightboxstyle={##1}{\csname uulm@box@#2@titleprefix\endcsname##2}{\csname uulm@box@#2@color\endcsname}}%
