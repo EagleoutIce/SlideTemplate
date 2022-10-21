@@ -421,7 +421,7 @@
 % named 'definition' which wenn called with '\begin{definition}[top=10mm]{My title}...'
 % will result in the option list 'uulm@boxstyle={top=10mm}{My title}{orange}'
 \def\@tmp{\newtcbox[use counter from=#2]}%
-\renewtcolorbox[auto counter]{#2}[2][]{uulm@boxstyle={before title app={\csname uulm@box@#2@titleprefix\endcsname},##1}{##2}{\csname uulm@box@#2@color\endcsname}}%
+\renewtcolorbox[auto counter,reset counter on overlays]{#2}[2][]{uulm@boxstyle={before title app={\csname uulm@box@#2@titleprefix\endcsname},##1}{##2}{\csname uulm@box@#2@color\endcsname}}%
 % here, we re-create the old macros (e.g. '\mydefinition')
 % 'capture=minipage' ensures their behavior is similar to the previous one (the default for
 % tcbox would be hbox and no longer fill the width)
